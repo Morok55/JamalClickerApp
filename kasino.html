@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="utf-8">
+    <meta name="author" content="Morok55">
+    <meta name="description" content="Bytecoin clicker">
+    <meta name="keywords" content="кликер,биткоин,bytecoin,clicker,html">
+    <title>Kasino</title>
+    <link rel="icon" href="https://8b08ab88-ee1b-4b04-9ae9-321e0da71ae2.selcdn.net/6933518d-992b-4bb9-99eb-e67a38952d98/bitcoinclipartmd.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/kasino.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-straight/css/uicons-regular-straight.css'> <!-- Назад -->
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.5.1/uicons-bold-straight/css/uicons-bold-straight.css'> <!-- Очистить -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+</head>
+<body id="kasino-body" ontouchstart>
+    <div id="header">
+        <div class="store">
+            <div>Ваш счёт:</div>
+            <div id="storeNum">0</div><div class="store-img"></div>
+        </div>
+        <a class="back-btn" id="back-btn" href="index.html"><i class="fi fi-rs-left"></i></a>
+    </div>
+
+    <div class="roulette-container">
+        <div class="roulette-img" id="roulette-img"><div id="background-black"></div></div>
+        <img src="images/kasino/arrow_small.png" alt="" class="arrow-img" id="arrow-img">
+        <div id="play-game"><button id="play-game-btn" class="show" onclick="playGame()">Играть</button></div>
+        <span class="win-text"><div id="win-num-text">Выиграло число 10</div></span>
+        <span class="win-text"><div id="win-sum-text">Ваш выигрыш: 110 000 000</div></span>
+    </div>
+
+    <div class="bets">
+        <div class="text-bets">Делайте ставки: <button class="clean-bets" onclick="сleanBets()"><i class="fi fi-bs-clear-alt"></i></button></div>
+        <hr size="3">
+        <div class="bets-color-menu">
+            <button class="bet-color bet-red" id="red" onclick="onClickBet(this)"></button>
+            <button class="bet-color bet-black" id="black" onclick="onClickBet(this)"></button>
+            <button class="bet-color bet-green" id="green" onclick="onClickBet(this)"></button>
+        </div>
+
+        <div class="bets-section-menu">
+            <button class="bet-section" id="1-2-7-8" onclick="onClickBet(this)">секция</button>
+            <button class="bet-section" id="3-4-9-10" onclick="onClickBet(this)">секция</button>
+            <button class="bet-section" id="5-6-11-12" onclick="onClickBet(this)">секция</button>
+        </div>
+
+        <div class="bets-number-menu">
+            <button class="bet-number" id="1" onclick="onClickBet(this)">1</button>
+            <button class="bet-number" id="2" onclick="onClickBet(this)">2</button>
+            <button class="bet-number" id="3" onclick="onClickBet(this)">3</button>
+            <button class="bet-number" id="4" onclick="onClickBet(this)">4</button>
+            <button class="bet-number" id="5" onclick="onClickBet(this)">5</button>
+            <button class="bet-number" id="6" onclick="onClickBet(this)">6</button>
+        </div>
+        <div class="bets-number-menu bets-number-menu-2">
+            <button class="bet-number" id="7" onclick="onClickBet(this)">7</button>
+            <button class="bet-number" id="8" onclick="onClickBet(this)">8</button>
+            <button class="bet-number" id="9" onclick="onClickBet(this)">9</button>
+            <button class="bet-number" id="10" onclick="onClickBet(this)">10</button>
+            <button class="bet-number" id="11" onclick="onClickBet(this)">11</button>
+            <button class="bet-number" id="12" onclick="onClickBet(this)">12</button>
+        </div>
+        <hr>
+        <div class="bets-coins-menu">
+            <button class="bet-coin" id="1000000" onclick="onClickPlusBet(this)">+1M</button>
+            <button class="bet-coin" id="10000000" onclick="onClickPlusBet(this)">+10M</button>
+            <button class="bet-coin" id="100000000" onclick="onClickPlusBet(this)">+100M</button>
+            <button class="bet-coin" id="1000000000" onclick="onClickPlusBet(this)">+1B</button>
+            <button class="bet-coin" id="10000000000" onclick="onClickPlusBet(this)">+10B</button>
+            <button class="bet-coin" id="100000000000" onclick="onClickPlusBet(this)">+100B</button>
+        </div>
+    </div>
+
+    <div class="loader">
+        <div class="loader-content">
+            <img src="images/load_image.jpg" alt="Loading" class="loader-image" />
+            <div class="dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const loader = document.querySelector('.loader');
+            const img = document.querySelector('.loader-image');
+
+            const minShowTime = 1000; // минимум 1 секунда
+            const startTime = Date.now();
+
+            function hideLoader() {
+                const elapsed = Date.now() - startTime;
+                const delay = Math.max(0, minShowTime - elapsed);
+
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    setTimeout(() => loader.remove(), 300); // fade-out
+                }, delay);
+            }
+
+            if (img.complete) {
+                hideLoader();
+            } else {
+                img.addEventListener('load', hideLoader);
+                img.addEventListener('error', hideLoader); // на случай ошибки
+            }
+        });
+
+        if (window.Telegram && window?.Telegram?.WebApp) {
+            var app = window.Telegram.WebApp;
+            app.ready();
+            app.expand();
+            // app.isClosingConfirmationEnabled = true;
+            app.isVerticalSwipesEnabled = false;
+            app.disableVerticalSwipes();
+            // app.requestFullscreen();
+        }
+
+        // window.addEventListener('load', function () { // Загрузка
+        //     const loader = document.querySelector('.loader');
+        //     loader.classList.add('hidden');
+        // });
+    </script>
+    <script src="js/kasino.js"></script>
+</body>
+</html>

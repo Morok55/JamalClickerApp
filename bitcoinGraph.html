@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>График Биткоина с покупками и продажами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        canvas {
+            max-width: 100%;
+            max-height: 50%;
+            height: 70vh;
+            width: 95vw;
+        }
+        select {
+            margin: 10px;
+            padding: 10px;
+            background-color: #222222;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="placeOrder('buy')">Купить</button>
+        <button onclick="placeOrder('sell')">Продать</button>
+    </div>
+    <select id="timeframeSelector">
+        <option value="5m">5 минут</option>
+        <option value="15m" selected>15 минут</option>
+        <option value="1h">1 час</option>
+    </select>
+    <canvas id="bitcoinChart"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let chart;
+        let orders = [];
+        const ctx = document.getElementById('bitcoinChart').getContext('2d');
+
+        async function fetchBitcoinData(interval) {
+            try {
+                const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&limit=48`);
+                const data = await response.json();
+                return data.map(item => ({
+                    time: new Date(item[0]).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+                    price: parseFloat(item[4])
+                }));
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error);
+            }
+        }
+
+        function renderChart(data) {
+            const labels = data.map(entry => entry.time);
+            const prices = data.map(entry => entry.price);
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Цена Биткоина (USD)',
+                            data: prices,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Покупки',
+                            data: orders.filter(order => order.type === 'buy').map(order => ({ x: order.time, y: order.price })),
+                            borderColor: 'rgba(0, 255, 0, 1)',
+                            backgroundColor: 'rgba(0, 255, 0, 1)',
+                            pointStyle: 'circle',
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            showLine: false
+                        },
+                        {
+                            label: 'Продажи',
+                            data: orders.filter(order => order.type === 'sell').map(order => ({ x: order.time, y: order.price })),
+                            borderColor: 'rgba(255, 0, 0, 1)',
+                            backgroundColor: 'rgba(255, 0, 0, 1)',
+                            pointStyle: 'rectRot',
+                            pointRadius: 8,
+                            pointHoverRadius: 10,
+                            showLine: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    if (context.datasetIndex === 1) {
+                                        return `Покупка: $${context.raw.y}`;
+                                    } else if (context.datasetIndex === 2) {
+                                        return `Продажа: $${context.raw.y}`;
+                                    }
+                                    return `Цена: $${context.raw.y}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Время',
+                                color: '#ffffff'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Цена (USD)',
+                                color: '#ffffff'
+                            },
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        async function updateChart() {
+            const interval = document.getElementById('timeframeSelector').value;
+            const bitcoinData = await fetchBitcoinData(interval);
+            if (bitcoinData) {
+                renderChart(bitcoinData);
+            }
+        }
+
+        function placeOrder(type) {
+            const currentPrice = chart.data.datasets[0].data.at(-1);
+            const currentTime = chart.data.labels.at(-1);
+            orders.push({ type, time: currentTime, price: currentPrice });
+            renderChart(chart.data.datasets[0].data.map((price, index) => ({ time: chart.data.labels[index], price })));
+        }
+
+        document.getElementById('timeframeSelector').addEventListener('change', updateChart);
+
+        updateChart();
+    </script>
+</body>
+</html>

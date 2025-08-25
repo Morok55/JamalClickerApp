@@ -1,0 +1,502 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height  : 100%;
+    overflow: hidden;
+    position: relative;
+    overscroll-behavior: none;
+}
+
+body {
+    /* background: url(https://img3.akspic.ru/attachments/crops/0/1/6/0/1/110610/110610-monohromnyj-atmosfera-nebo-dizajn-chernyy-1080x1920.jpg) center fixed; */
+    background: url(https://avatars.mds.yandex.net/i?id=e03ef727cd67fdf85b8cd09afb647dc4_sr-4538182-images-thumbs&n=13) center fixed;
+    background-size: cover;
+    background-blend-mode: multiply;
+    color: white;
+    height: 100%;
+    overflow: none;
+    position: relative;
+    overscroll-behavior: none;
+    touch-action: none; /* Позволяет в большинстве случаев избежать изменение масштабирования на iphone, но работает с багами(можно не вернуться на старый мастштаб). Можно использовать none, но тогда недоступна будет прокрутка */
+    /* Запретить выделение (копирование) */
+    -webkit-user-select: none; /* Chrome, Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Non-prefixed version */
+    -webkit-touch-callout: none; /* Отключение контекстного меню на iOS */
+}
+
+br {
+    display: block;
+    content: "";
+    margin-top: 0;
+    height: 0px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    padding: 0;
+    margin: 0;
+    color: white;  /* old IE */
+    background-color: white;  /* Modern Browsers */
+    opacity: 0.5;
+}
+
+#kasino-body {
+    background-color: rgba(34, 34, 34, 0.35);
+}
+
+
+#header {
+    width: 100%;
+    height: 9vh;
+    font-size: 22px;
+    background: rgba(34, 34, 34, 0.5);
+    box-shadow: 0 0 10px rgba(34, 34, 34, 0.5);
+}
+
+.back-btn {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 9vh;
+    height: 9vh;
+    line-height: 10vh;
+    text-align: center;
+    font-size: 26px;
+    color: white;
+    border-radius: 20px;
+    animation: opacity-up 0.3s forwards ease-in-out;
+}
+
+@keyframes opacity-up {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.back-btn:active {
+    background: rgba(34, 34, 34, 0.5);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.store {
+    position: relative;
+    text-align: center;
+    width: 100%;
+    font-size: 21px;
+}
+
+#storeNum {
+    display: inline;
+    font-size: 24px;
+}
+
+.store-img {
+    display: inline;
+    /* width: 25px; */
+    /* height: 25px; */
+    padding-right: 23px;
+    font-size: 18px;
+    margin-left: 5px;
+    /* margin-top: 10px; */
+    background: url('../images/money_store_small.png') center;
+    background-size: cover;
+    border-radius: 100%;
+}
+
+.roulette-container {
+    display: block;
+    margin: auto;
+    margin-top: 3%;
+    height: 40vh;
+    width: 40vh;
+    /* position: relative; */
+}
+
+.roulette-img {
+    background: url('../images/kasino/roulette_small.png') center;
+    background-size: 111% 111%;
+    height: 40vh;
+    width: 40vh;
+    filter: drop-shadow(0 0 20px green);
+    border: 1px solid green;
+    border-radius: 100%;
+    background-color: rgba(0, 0, 0, 0.514);
+    transform: rotate(0);
+    transition: transform 12s cubic-bezier(.37,0,.29,1);
+}
+
+#background-black {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background-color: rgba(34, 34, 34, 0.3);
+}
+
+.arrow-img {
+    position: absolute;
+    width: 18%;
+    height: auto;
+    top: 19%;
+    left: 41%;
+    rotate: 180deg;
+    opacity: 0.6;
+}
+
+#play-game {
+    display: block;
+    position: absolute;
+    text-align: center;
+    top: 26vh;
+    left: 0;
+    width: 100%;
+}
+
+#play-game-btn {
+    background: rgba(128, 128, 128, 0.91);
+    width: 20vh;
+    height: 10vh;
+    font-size: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: black;
+    letter-spacing: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#play-game-btn:active {
+    background: rgba(110, 110, 110, 0.91)
+}
+
+#play-game-btn.show {
+    display: block;
+    opacity: 1;
+}
+
+#win-sum-text {
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 20vh;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#win-sum-text.show {
+    display: block;
+    opacity: 1;
+}
+
+#win-num-text {
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 40vh;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#win-num-text.show {
+    display: block;
+    opacity: 1;
+}
+
+.win-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: yellow;
+    letter-spacing: 1px;
+    /* -webkit-text-stroke: 0.5px black; */
+    text-shadow: 3px 3px 3px black;
+}
+
+.bets {
+    background: rgba(34, 34, 34, 0.5);
+    width: 100%;
+    height: 48vh;
+    margin-top: 3%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 0 10px rgba(34, 34, 34, 0.5);
+}
+
+.text-bets {
+    text-align: center;
+    font-size: 20px;
+    color: rgb(255, 230, 0);
+    text-shadow: 4px 4px 4px black;
+    text-decoration: 1px solid black;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.clean-bets {
+    position: absolute;
+    font-size: 30px;
+    right: 3%;
+    color: rgba(255, 255, 0, 0.85);
+    text-shadow: 3px 3px 3px black;
+}
+
+.clean-bets:active {
+    opacity: 0.5;
+}
+
+.bets-color-menu {
+    display: flex;
+    justify-content: space-around;
+    height: 15%;
+    margin-top: 4%;
+}
+
+.bet-color {
+    width: 20%;
+    border-radius: 5px;
+    color: white;
+}
+
+.bet-red {
+    background: rgba(255, 0, 0, 0.8);
+    border: 1px solid red;
+    box-shadow: 0 0 10px red;
+}
+
+/* .bet-red:focus {
+    background: rgba(255, 0, 0, 0.9);
+    box-shadow: 0 0 25px red;
+} */
+
+.bet-black {
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid black;
+    box-shadow: 0 0 10px black;
+}
+
+/* .bet-black:focus {
+    background: rgba(0, 0, 0, 0.95);
+    box-shadow: 0 0 25px black;
+} */
+
+.bet-green {
+    background: rgba(0, 128, 0, 0.9);
+    border: 1px solid green;
+    box-shadow: 0 0 10px green;
+}
+
+/* .bet-green:focus {
+    background: rgba(0, 128, 0, 0.95);
+    box-shadow: 0 0 25px green;
+} */
+
+.bets-section-menu {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 4%;
+    margin-bottom: 0.5%;
+    height: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.bet-section {
+    background: rgba(0, 0, 128, 0.5);
+    color: white;
+    width: 115px;
+    height: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.6);
+}
+
+.bets-number-menu {
+    display: flex;
+    justify-content: space-around;
+    height: 40px;
+    /* margin-top: 6%; */
+}
+
+.bets-number-menu-2 {
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+
+.bet-number {
+    background: rgba(34, 34, 34, 0.5);
+    width: 55px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
+    border: 1px solid black;
+    box-shadow: 0 0 5px rgba(255, 238, 0, 0.5);
+    text-align: center;
+    font-size: 14px;
+    color: white;
+}
+
+/* .bet-number:focus {
+    box-shadow: 0 0 20px yellow;
+} */
+
+.bets-coins-menu {
+    display: flex;
+    justify-content: space-around;
+    height: 50px;
+    margin-top: 4%;
+}
+
+.bet-coin {
+    background: rgba(0, 1, 61, 0.5);
+    width: 60px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 15px;
+    border: 1px solid blue;
+    /* box-shadow: 0 0 10px rgba(0, 1, 61, 0.5); */
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    opacity: 0.8;
+}
+
+.bet-coin:active {
+    background: rgba(0, 2, 124, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
+    opacity: 1;
+}
+
+/* .bet-coin:focus {
+    background: rgba(0, 3, 161, 0.5);
+    box-shadow: 0 0 10px blue;
+    opacity: 1;
+} */
+
+.coin {
+    position: absolute;
+    top: 23vh;
+    width: 30px;
+    height: 30px;
+    background-image: url('../images/money_store_small.png'); /* Замените на путь к изображению монеты */
+    background-size: cover;
+    animation: coin-up 1.5s cubic-bezier(0,-0.34,.95,-0.22);
+}
+
+@keyframes coin-up {
+    0% {
+        transform: translateY(0) rotate(-10deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-20vh) translateX(30px) rotate(-90deg);
+        left: 50%;
+        opacity: 0.4;
+    }
+}
+
+
+
+
+/* Загрузка */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #04020D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    flex-direction: column;
+}
+
+.loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-content {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.loader-image {
+    width: 100vw;
+    height: 95vh;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 9 / 16; /* Пример для вертикального экрана */
+}
+
+/* Анимация точек загрузки */
+.dots {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.dots span {
+    width: 15px;
+    height: 15px;
+    background-color: white;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
