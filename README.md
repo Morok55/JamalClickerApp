@@ -46,7 +46,7 @@
 
 ## 🌐 Доступ
 Приложение доступно в Telegram по адресу:  
-👉 [JamalClickerGame]([https://t.me/CalcFastBot](https://t.me/bytecoin_clicker_bot))
+👉 [JamalClickerGame](https://t.me/bytecoin_clicker_bot)
 
 ## ✨ Автор
 Разработчик: **Morok55**
